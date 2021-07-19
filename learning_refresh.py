@@ -2,6 +2,7 @@
 
 from os import listdir
 import re
+from datetime import datetime
 
 
 def findPositions(line):  # find positions of > extraction <
@@ -29,6 +30,20 @@ def excerptFrom(item):  # create excerpt
             line = line.replace(re.search('<.*?>', line).group(0), '')
         string = string + line
     return (string[:200], cnt / 2)  # length of excerption & number of pages in current catogory
+
+
+def exportDate(item):
+    item_path = '../public_html/LEARNING/' + item + '.html'
+    lines = open(item_path, 'r', encoding='utf-8').readlines()
+    tmp = 0
+    once = 0
+    for line in lines:
+        tmp = tmp + 1
+        if 'datetime' in line and once == 0:
+            date_posi = findPositions(lines[tmp-1])
+            date = lines[tmp-1][date_posi[0]:date_posi[1]]
+            once = once + 1
+    return date
 
 
 fpath = '../public_html/Learning.html'
@@ -69,6 +84,16 @@ for i in title:  # remove extra
         segment.pop(i)
         parts.pop(i)
 
+ptimes = []
+for i in range(len(files)):
+    item_d = files[i][:-5]
+    if item_d not in title:
+        title.append(item_d)
+    date = exportDate(item_d)
+    ptime = datetime.strptime(date, "%B %d, %Y").timestamp()
+    ptimes.append(ptime)
+new_posi = ptimes.index(max(ptimes))
+
 for i in range(len(files)):  # refresh
     item = files[i][:-5]
     if item not in title:
@@ -79,8 +104,12 @@ for i in range(len(files)):  # refresh
     title_nw = title_format[:]
     content_nw = content_format[:]
     posi_ini = title_nw[3].find('<')
+    if i == new_posi:
+        suffix = ')     <i><b style="color:red;font-size:30px;">New!</b></i>'
+    else:
+        suffix = ')'
     title_nw[3] = title_nw[3][:posi_ini] + '<a href="LEARNING/' + item + '">' + item + '(' + str(
-        int(pnum)) + ')' + '</a>\n'
+        int(pnum)) + suffix + '</a>\n'
     [posi1, posi2] = findPositions(content_nw[1])
     segment[item] = excerpt
     content_nw[1] = content_nw[1][:posi1] + excerpt + content_nw[1][posi2:]

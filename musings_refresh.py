@@ -37,36 +37,40 @@ for i in range(len(dates)):
 
 # delete
 print(cstruct)
-if input("Do you want to delete on of them?[Y/N]").lower()=='y':
+if input("Do you want to delete one of them?[Y/N]: ").lower()=='y':
     delete = input("Enter the date: ")
     cstruct.pop(delete)
     sstruct.pop(delete)
+    body = []
+    for item in sstruct:
+        body.extend(sstruct[str(item)])
 
-# add
-mbody = lines[plabel[0]:plabel[1]+1]
-tmp = 0
-for line in mbody:
-    tmp = tmp + 1
-    if 'datetime' in line:
-        if input("Use today's date?[Y/N]: ").lower()=='n':
-            mdate = input("Enter a date with the form like January 01, 2001: ")  # choose from GUI can avoid mistake of typing
-        else:
-            mdate_tmp = date.today()
-            mdate = mdate_tmp.strftime("%B %d, %Y")
-        mbody[tmp-1] = '    <time datetime="2021-06-07">' + mdate + '</time>\n'
-    if 'text-align-center' in line:
-        musing = input("Input your musing: ")
-        mbody[tmp] = musing
-date_num = datetime.strptime(mdate, "%B %d, %Y").timestamp()
-cstruct[str(date_num)] = musing
-sstruct[str(date_num)] = mbody
+if input("Add a musing?[Y/N]: ").lower() == 'y':
+    # add
+    mbody = lines[plabel[0]:plabel[1]+1]
+    tmp = 0
+    for line in mbody:
+        tmp = tmp + 1
+        if 'datetime' in line:
+            if input("Use today's date?[Y/N]: ").lower()=='n':
+                mdate = input("Enter a date with the form like January 01, 2001: ")  # choose from GUI can avoid mistake of typing
+            else:
+                mdate_tmp = date.today()
+                mdate = mdate_tmp.strftime("%B %d, %Y")
+            mbody[tmp-1] = '    <time datetime="2021-06-07">' + mdate + '</time>\n'
+        if 'text-align-center' in line:
+            musing = input("Input your musing: ")
+            mbody[tmp] = musing
+    date_num = datetime.strptime(mdate, "%B %d, %Y").timestamp()
+    cstruct[str(date_num)] = musing
+    sstruct[str(date_num)] = mbody
 
-order = sorted([float(i) for i in sstruct])
-order.reverse()
+    order = sorted([float(i) for i in sstruct])
+    order.reverse()
 
-body = []
-for item in order:
-    body.extend(sstruct[str(item)])
+    body = []
+    for item in order:
+        body.extend(sstruct[str(item)])
 
 head = lines[:plabel[0]]
 foot = lines[plabel[-1]+1:]
