@@ -50,14 +50,14 @@ def contentReplace(article, category_name):
     ncontent = open(nname, 'r', encoding='utf-8').readlines()
     ever_content = ncontent[-2]
     ever_content = ever_content.replace('src="', 'src="../evernote/'+category_name+'/')
-    print(ever_content)
+#    print(ever_content)
 
     tmp = 0
     clabel = []
     for line in article:
         tmp = tmp + 1
         if 'datetime=' in line:
-            if input("Change date?[Y/N]").lower()=='y':
+            if input("Change date?[Y/N]: ").lower()=='y':
                 posi = findPositions(line)
                 if input("Use today's date?[Y/N]: ").lower() == 'N'.lower():
                     edate = input("Enter a date with the form like January 01, 2001: ")
@@ -69,7 +69,7 @@ def contentReplace(article, category_name):
             clabel.append(tmp - 1)
     seg = article[:clabel[0]+1]
     seg.append(ever_content)
-    seg.extend(article[clabel[1] - 1:])
+    seg.extend(article[clabel[1]:])
     return seg
 
 
