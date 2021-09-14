@@ -123,7 +123,7 @@ def addArticle(name, page_name, cname):
     insert_position = []
     tmp = 0
     alabel = '<!-- article label -->\n'
-    for line in open('../public_html./LEARNING/' + name + '.html', 'r', encoding='utf-8').readlines():
+    for line in open('../public_html/LEARNING/' + name + '.html', 'r', encoding='utf-8').readlines():
         tmp = tmp + 1
         if alabel in line:
             seg_tmp = seg_tmp + 1

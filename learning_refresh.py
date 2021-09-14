@@ -125,5 +125,5 @@ for i in sorted(segment, key=str.casefold):
 
 head.extend(body)
 head.extend(foot)
-path_test = '../public_html/learning.html'
+path_test = '../public_html/Learning.html'
 open(path_test, 'w', encoding='utf-8').writelines(head)
